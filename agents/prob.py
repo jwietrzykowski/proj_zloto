@@ -9,7 +9,7 @@ from gridutil import *
 
 class LocAgent:
 
-    def __init__(self, size, walls, eps_move, loc):
+    def __init__(self, size, walls, eps_move, npits, loc):
         self.size = size
         self.walls = walls
         # list of valid locations
@@ -17,6 +17,7 @@ class LocAgent:
         # dictionary from location to its index in the list
         self.loc_to_idx = {iloc: idx for idx, iloc in enumerate(self.locations)}
         self.eps_move = eps_move
+        self.npits = npits
         self.loc = loc
 
         # previous action
@@ -27,10 +28,10 @@ class LocAgent:
         self.V = np.zeros([len(self.locations)], dtype=np.float)
         self.pi = ['E' for _ in self.locations]
 
-        # PUT YOUR ADDITIONAL VARIABLES HERE
+        # TODO PUT YOUR ADDITIONAL VARIABLES HERE
 
 
-        # ----------------------------------
+        # ---------------------------------------
 
         self.comp_value_and_policy()
 
@@ -43,10 +44,10 @@ class LocAgent:
         iter = 0
         
         # compute self.V and self.pi
-        # PUT YOUR CODE HERE
+        # TODO PUT YOUR CODE HERE
 
 
-        # ------------------
+        # -----------------------
 
         print('Policy found after ', iter, ' iterations')
 
@@ -56,6 +57,13 @@ class LocAgent:
 
     def __call__(self, percept, loc):
         self.loc = loc
+
+        # update the policy
+        # TODO PUT YOUR CODE HERE
+
+
+        # -----------------------
+
         # choose action according to policy
         action = self.pi[self.loc_to_idx[self.loc]]
 

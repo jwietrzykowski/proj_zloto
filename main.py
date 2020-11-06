@@ -70,7 +70,6 @@ class LocWorldEnv:
 
         if self.agentLoc in self.pits:
             self.lifes -= 1
-            self.reset()
             points -= 10
             if self.lifes == 0:
                 self.finished = True
@@ -194,6 +193,7 @@ def main():
     n_steps = 40
     # size of the environment
     env_size = 16
+    # map can be different during test
     # map of the environment: 1 - wall, 0 - free
     map = np.array([[1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
                     [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
@@ -219,8 +219,10 @@ def main():
                 walls.append((j, env_size - i - 1))
 
     ngames = 10
-    step_lim = 50
+    step_lim = 20
+    # number of pits can be different during test
     npits = 3
+    # starting location can be different during test
     start_loc = (0, 6)
     all_points = 0
     for g in range(ngames):
@@ -240,7 +242,7 @@ def main():
         view = LocView(env)
 
         # create the agent
-        agent = agents.prob.LocAgent(env.size, env.walls, eps_move, start_loc)
+        agent = agents.prob.LocAgent(env.size, env.walls, eps_move, npits, start_loc)
         t = 0
         while not env.finished and t < step_lim:
             print('step %d' % t)
@@ -257,16 +259,18 @@ def main():
             pi = agent.get_policy()
             view.update(env, pi=pi)
             update(rate)
-            # uncomment to pause before action
+
+            # uncomment to pause before action/reset
             # view.pause()
 
-            game_points += env.doAction(action)
+            # if not in pit then execute action
+            if 'pit' not in percept:
+                game_points += env.doAction(action)
+            else:
+                env.reset()
 
             t += 1
 
-        # after the last action - possibility to update pits location
-        percept = env.getPercept()
-        agent(percept, env.agentLoc)
         pi = agent.get_policy()
         view.update(env, pi=pi)
 
