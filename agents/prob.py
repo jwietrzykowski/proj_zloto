@@ -36,9 +36,6 @@ class LocAgent:
         self.comp_value_and_policy()
 
     def comp_value_and_policy(self):
-        reward_gold = 10
-        reward_pits = -100
-        gamma = 0.9
         eps_V = 1e-6
 
         iter = 0

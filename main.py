@@ -121,6 +121,7 @@ class LocView:
         self.info = Text(Point(ccenter, (xySize - 1) * .25), "").draw(win)
         self.info.setSize(20)
         self.info.setFace("courier")
+        self.policy_arrows = []
 
         self.update(state)
 
@@ -155,9 +156,12 @@ class LocView:
             self.agt = self.drawArrow(state.agentLoc, state.agentDir, 10, self.color)
 
         if pi:
+            for a in self.policy_arrows:
+                a.undraw()
+            self.policy_arrows = []
             for loc, cell in self.cells.items():
                 if loc in pi:
-                    self.drawArrow(loc, pi[loc], 3, 'green')
+                    self.policy_arrows.append(self.drawArrow(loc, pi[loc], 3, 'green'))
 
     def drawArrow(self, loc, heading, width, color):
         x, y = loc
